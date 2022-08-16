@@ -4,11 +4,12 @@
 RF24 radio(9, 10);                // CE, CSN
 const byte address[6] = "00001";  //Byte of array representing the address. This is the address where we will send the data. This should be same on the receiving side.
 int button_pin = 2;
+int led_pin = 3;
 boolean button_state = 0;
 
 void setup() {
   Serial.begin(115200);
-  pinMode(3, OUTPUT);
+  pinMode(led_pin, OUTPUT);
   pinMode(button_pin, INPUT);
   radio.begin();                   //Starting the Wireless communication
   radio.openWritingPipe(address);  //Setting the address where we will send the data
@@ -18,12 +19,12 @@ void setup() {
 void loop() {
   button_state = digitalRead(button_pin);
   if (button_state == HIGH) {
-    digitalWrite(3, HIGH);
+    digitalWrite(led_pin, HIGH);
     Serial.println("Button On");
     const char text[] = "Your Button State is HIGH";
     radio.write(&text, sizeof(text));  //Sending the message to receiver
   } else {
-    digitalWrite(3, LOW);
+    digitalWrite(led_pin, LOW);
     const char text[] = "Your Button State is LOW";
     radio.write(&text, sizeof(text));  //Sending the message to receiver
   }
